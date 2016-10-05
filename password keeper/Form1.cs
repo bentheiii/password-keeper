@@ -6,7 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Edge.Crypto;
+//using Edge.Crypto;
+using CipherStone;
 using Edge.Guard;
 using Edge.PermanentObject;
 using Edge.Random;
@@ -59,7 +60,7 @@ namespace password_keeper
             if (openFileDialog1.ShowDialog() == DialogResult.OK && keyrequest.ShowDialog(this) == DialogResult.OK)
             {
                 _path.EventValue = _permaPath.value =openFileDialog1.FileName;
-                _password = Sha2Hashing.Hash(keyrequest.Key).Take(Encryption.KEY_LENGTH).ToArray();
+                _password = Encoding.Unicode.GetBytes(keyrequest.Key);
                 decrypt(_path.EventValue);
             }
         }
@@ -116,7 +117,7 @@ namespace password_keeper
             var keyrequest = new keyrequest();
             if (keyrequest.ShowDialog(this) == DialogResult.OK)
             {
-                _password = Sha2Hashing.Hash(keyrequest.Key).Take(Encryption.KEY_LENGTH).ToArray();
+                _password = Encoding.Unicode.GetBytes(keyrequest.Key);
                 decrypt(_path.EventValue);
             }
         }
