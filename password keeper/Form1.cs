@@ -3,10 +3,8 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-//using Edge.Crypto;
 using CipherStone;
 using Edge.Guard;
 using Edge.PermanentObject;
@@ -124,12 +122,15 @@ namespace password_keeper
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var plaintext = Encoding.Unicode.GetBytes(Authstring + "\n" + richTextBox1.Text);
+            var l = Authstring + "\n" + richTextBox1.Text;
+            var plaintext = Encoding.Unicode.GetBytes(l);
             var key = _password;
             var padding = new GlobalRandomGenerator().Int(plaintext.Length/4,plaintext.Length/2);
-            File.WriteAllBytes(_path.EventValue, SecureEncryption.Encrypt(plaintext, _password));
+            var gen = new GlobalRandomGenerator();
+            File.WriteAllBytes(_path.EventValue, SecureEncryption.Encrypt(plaintext, _password, padding, () => gen.Bytes(1)[0]));
             timer1.Start();
             _timesincelogin = new TimeSpan(1,0,0);
+            _lines = l.Split('\n');
         }
 
         private void button4_Click(object sender, EventArgs e)
