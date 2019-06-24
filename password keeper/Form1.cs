@@ -68,7 +68,7 @@ namespace password_keeper
             var temp = File.ReadAllBytes(path);
             if (temp.Length != 0)
             {
-                var decrypted = Encoding.Unicode.GetString(SecureEncryption.Decrypt(temp, _password));
+                var decrypted = Encoding.Unicode.GetString(SecureEncryptionV1.Decrypt(temp, _password));
                 _lines = decrypted.Split('\n');
 #if (auth)
                 if (_lines[0] != Authstring)
@@ -127,7 +127,7 @@ namespace password_keeper
             var key = _password;
             var padding = new GlobalRandomGenerator().Int(plaintext.Length/4,plaintext.Length/2);
             var gen = new GlobalRandomGenerator();
-            File.WriteAllBytes(_path.EventValue, SecureEncryption.Encrypt(plaintext, _password, padding, () => gen.Bytes(1)[0]));
+            File.WriteAllBytes(_path.EventValue, SecureEncryptionV1.Encrypt(plaintext, _password, padding, () => gen.Bytes(1)[0]));
             timer1.Start();
             _timesincelogin = new TimeSpan(1,0,0);
             _lines = l.Split('\n');
